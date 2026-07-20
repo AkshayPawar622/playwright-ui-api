@@ -1,12 +1,13 @@
 import { test, expect } from '../fixtures/baseFixture';
 import { DataProvider } from '../utils/dataProvider';
 import { openApplication } from '../setup/TestHooks';
+import path from "path";
 
 openApplication();
 
 //Load JSON test data logindata.json
 
-const jsonPath="data/logindata.json";
+const jsonPath = path.join(process.cwd(), "data", "logindata.json");
 const jsonTestData=DataProvider.getTestDataFromJson(jsonPath);
 
 
@@ -41,7 +42,7 @@ for(const data of jsonTestData)
 
 //Load CSV test data logindata.json
 
-const csvPath = "data/logindata.csv";
+const csvPath = path.join(process.cwd(), "data", "logindata.csv");
 const csvTestData = DataProvider.getTestDataFromCsv(csvPath);
 
 
