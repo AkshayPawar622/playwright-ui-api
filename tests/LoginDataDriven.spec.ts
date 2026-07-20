@@ -7,7 +7,7 @@ openApplication();
 
 //Load JSON test data logindata.json
 
-const jsonPath = path.join(process.cwd(), "data", "logindata.json");
+const jsonPath = path.join(process.cwd(), "data", "loginData.json");
 const jsonTestData=DataProvider.getTestDataFromJson(jsonPath);
 
 
@@ -42,7 +42,7 @@ for(const data of jsonTestData)
 
 //Load CSV test data logindata.json
 
-const csvPath = path.join(process.cwd(), "data", "logindata.csv");
+const csvPath = path.join(process.cwd(), "data", "loginData.csv");
 const csvTestData = DataProvider.getTestDataFromCsv(csvPath);
 
 
