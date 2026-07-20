@@ -1,8 +1,51 @@
-
-# Playwright
+# ============================
+# Dependencies
+# ============================
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
+
+# ============================
+# Playwright Reports
+# ============================
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# ============================
+# Allure Reports
+# ============================
+allure-results/
+allure-report/
+
+# ============================
+# Logs
+# ============================
+logs/
+*.log
+
+# ============================
+# Code Coverage
+# ============================
+coverage/
+
+# ============================
+# Environment Files
+# ============================
+.env
+.env.*
+
+# Keep sample env file
+!.env.example
+
+# ============================
+# IDE Files
+# ============================
+.vscode/
+.idea/
+
+# ============================
+# Operating System Files
+# ============================
+.DS_Store
+Thumbs.db
