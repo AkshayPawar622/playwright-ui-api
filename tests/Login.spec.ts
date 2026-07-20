@@ -1,30 +1,42 @@
-import { expect, test } from '@playwright/test';
-import { HomePage } from '../pages/HomePage';
-import { LoginPage } from '../pages/LoginPage';
-import { TestConfig } from '../test.config';
+/**
+ * Test Case: Login with Valid Credentials
+ * 
+ * Tags: @master @sanity @regression
+ * 
+ * Steps:
+ * 1) Navigate to the application URL
+ * 2) Navigate to Login page via Home page
+ * 3) Enter valid credentials and log in
+ * 4) Verify successful login by checking 'My Account' page presence
+ */
 
-test('User should log in successfully', async ({ page }) => {
-    const testConfig = new TestConfig();
-    const homePage = new HomePage(page);
-    const loginPage = new LoginPage(page);
+import { test, expect } from '../fixtures/baseFixture';
+import { config } from '../config/TestConfig';
+import { openApplication } from '../setup/TestHooks';
 
-    await test.step('Launch the application', async () => {
-        await page.goto(testConfig.appUrl);
-    });
+openApplication();
 
-    await test.step('Navigate to the login page', async () => {
-        await homePage.clickMyAccount();
-        await homePage.clickLogin();
 
-        await expect(page).toHaveURL(/route=account\/login/);
-    });
+test('User login test @master @sanity @regression',async({ app })=>{
+    const homePage = app.getHomePage();
+    const loginPage = app.getLoginPage();
+    const myAccountPage = app.getMyAccountPage();
 
-    await test.step('Log in with the configured user', async () => {
-        await loginPage.login(testConfig.email, testConfig.password);
-    });
+    //Navigate to Login page via Home page
 
-    await test.step('Verify successful login', async () => {
-        await expect(page).toHaveURL(/route=account\/account/);
-        await expect(page.getByRole('heading', { name: 'My Account', level: 2 })).toBeVisible();
-    });
-});
+    await homePage.clickMyAccount();
+    await homePage.clickLogin();
+
+    //Enter valid credentials and log in
+    await loginPage.setEmail(config.email);
+    await loginPage.setPassword(config.password);
+    await loginPage.clickLogin();
+
+    //alternatevly
+    //await loginPage.login(config.email,config.password);
+
+    //Verify successful login by checking 'My Account' page presence
+    const isLoggedIn=await myAccountPage.isMyAccountPageExists();
+    expect(isLoggedIn).toBeTruthy();
+
+})

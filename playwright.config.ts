@@ -21,7 +21,7 @@ export default defineConfig({
 
   use: {
     // Browser settings
-    viewport: {
+     viewport: {
       width: 1280,
       height: 720,
     },

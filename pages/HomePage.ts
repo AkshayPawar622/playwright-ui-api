@@ -1,48 +1,94 @@
-import {Page,Locator} from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class HomePage{
+export class HomePage extends BasePage {
 
-    private readonly page:Page;
-    
-    private readonly lnkMyAccount:Locator;
-    private readonly lnkRegister:Locator;
-    private readonly lnkLogin:Locator;
-    private readonly lnkLogout:Locator;
-    private readonly txtSearchbox:Locator;
-    private readonly btnSearch:Locator;
-  
-    constructor(page:Page){
+    // Locators
+    private readonly lnkMyAccount: Locator;
+    private readonly lnkRegister: Locator;
+    private readonly lnkLogin: Locator;
+    private readonly txtSearchBox: Locator;
+    private readonly btnSearch: Locator;
 
-       this.page=page;
+    constructor(page: Page) {
 
-       this.btnSearch= page.getByRole('button',{name: ''});
-       this.lnkLogin = page.getByRole('link', { name: 'Login', exact: true }).first();
-       this.lnkRegister = page.getByRole('link', { name: 'Register', exact: true }).first();
-       this.lnkLogout = page.getByRole('link', { name: 'Logout', exact: true }).first();
-       this.lnkMyAccount = page.getByRole('link').filter({ hasText: 'My Account' }).first();
-       this.txtSearchbox = page.getByPlaceholder('Search');
+        super(page);
+
+        this.lnkMyAccount = page.locator('span:has-text("My Account")');
+        this.lnkRegister = page.locator('a:has-text("Register")');
+        this.lnkLogin = page.locator('a:has-text("Login")');
+        this.txtSearchBox = page.locator('input[placeholder="Search"]');
+        this.btnSearch = page.locator('#search button[type="button"]');
     }
-    
-async  clickMyAccount(){
-     await this.lnkMyAccount.click();
-}
 
-async clickLogin(){
-    await this.lnkLogin.click()
-}
+    /**
+     * Verifies whether the Home Page is displayed.
+     */
+    async isHomePageExists(): Promise<boolean> {
 
-async clickLogout(){
-    await this.lnkLogout.click();
-}
+        return await this.lnkMyAccount.isVisible();
 
-async searchProduct(product: string){
-       await this.txtSearchbox.fill(product);
-        await this.btnSearch.click();
-}
+    }
 
-async clickRegisterLnk(){
-   await this.lnkRegister.click();
-}
+    /**
+     * Clicks on the My Account link.
+     */
+    async clickMyAccount(): Promise<void> {
 
+        await this.click(
+            this.lnkMyAccount,
+            'My Account Link'
+        );
+
+    }
+
+    /**
+     * Clicks on the Register link.
+     */
+    async clickRegister(): Promise<void> {
+
+        await this.click(
+            this.lnkRegister,
+            'Register Link'
+        );
+
+    }
+
+    /**
+     * Clicks on the Login link.
+     */
+    async clickLogin(): Promise<void> {
+
+        await this.click(
+            this.lnkLogin,
+            'Login Link'
+        );
+
+    }
+
+    /**
+     * Enters the product name into the search box.
+     */
+    async enterProductName(productName: string): Promise<void> {
+
+        await this.fill(
+            this.txtSearchBox,
+            productName,
+            'Search Box'
+        );
+
+    }
+
+    /**
+     * Clicks the Search button.
+     */
+    async clickSearch(): Promise<void> {
+
+        await this.click(
+            this.btnSearch,
+            'Search Button'
+        );
+
+    }
 
 }

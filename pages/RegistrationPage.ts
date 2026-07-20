@@ -1,87 +1,123 @@
-import { Locator, Page } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class RegistrationPage {
-
-    private readonly page: Page;
-
-    private readonly txtFirstName: Locator;
-    private readonly txtLastName: Locator;
+export class RegistrationPage extends BasePage {
+    
+    // Locators using CSS selectors
+    private readonly txtFirstname: Locator;
+    private readonly txtLastname: Locator;
     private readonly txtEmail: Locator;
     private readonly txtTelephone: Locator;
     private readonly txtPassword: Locator;
-    private readonly txtPasswordConfirm: Locator;
-    private readonly rdoNewsletterYes: Locator;
-    private readonly rdoNewsletterNo: Locator;
-    private readonly chkPrivacyPolicy: Locator;
+    private readonly txtConfirmPassword: Locator;
+    private readonly chkdPolicy: Locator;
     private readonly btnContinue: Locator;
+    private readonly msgConfirmation: Locator;
 
     constructor(page: Page) {
-        this.page = page;
-
-        this.txtFirstName = page.getByPlaceholder('First Name');
-        this.txtLastName = page.getByPlaceholder('Last Name');
-        this.txtEmail = page.getByPlaceholder('E-Mail');
-        this.txtTelephone = page.getByPlaceholder('Telephone');
-        this.txtPassword = page.getByPlaceholder('Password', { exact: true });
-        this.txtPasswordConfirm = page.getByPlaceholder('Password Confirm');
-        this.rdoNewsletterYes = page.getByRole('radio', { name: 'Yes' });
-        this.rdoNewsletterNo = page.getByRole('radio', { name: 'No' });
-        this.chkPrivacyPolicy = page.getByRole('checkbox');
-        this.btnContinue = page.getByRole('button', { name: 'Continue' });
+        super(page);
+        
+        // Initialize locators with CSS selectors
+        this.txtFirstname = page.locator('#input-firstname');
+        this.txtLastname = page.locator('#input-lastname');
+        this.txtEmail = page.locator('#input-email');
+        this.txtTelephone = page.locator('#input-telephone');
+        this.txtPassword = page.locator('#input-password');
+        this.txtConfirmPassword = page.locator('#input-confirm');
+        this.chkdPolicy = page.locator('input[name="agree"]');
+        this.btnContinue = page.locator('input[value="Continue"]');
+        this.msgConfirmation = page.locator('h1:has-text("Your Account Has Been Created!")');
     }
 
-    async enterFirstName(firstName: string) {
-        await this.txtFirstName.fill(firstName);
+    /**
+     * Sets the first name in the registration form
+     * @param fname - First name to enter
+     */
+    async setFirstName(fname: string): Promise<void> {
+        await this.fill(this.txtFirstname, fname, 'First Name');
     }
 
-    async enterLastName(lastName: string) {
-        await this.txtLastName.fill(lastName);
+    /**
+     * Sets the last name in the registration form
+     * @param lname - Last name to enter
+     */
+    async setLastName(lname: string): Promise<void> {
+        await this.fill(this.txtLastname, lname, 'Last Name');
     }
 
-    async enterEmail(email: string) {
-        await this.txtEmail.fill(email);
+    /**
+     * Sets the email in the registration form
+     * @param email - Email to enter
+     */
+    async setEmail(email: string): Promise<void> {
+        await this.fill(this.txtEmail, email, 'Email Address');
     }
 
-    async enterTelephone(telephone: string) {
-        await this.txtTelephone.fill(telephone);
+    /**
+     * Sets the telephone number in the registration form
+     * @param tel - Telephone number to enter
+     */
+    async setTelephone(tel: string): Promise<void> {
+        await this.fill(this.txtTelephone, tel, 'Telephone');
     }
 
-    async enterPassword(password: string) {
-        await this.txtPassword.fill(password);
+    /**
+     * Sets the password in the registration form
+     * @param pwd - Password to enter
+     */
+    async setPassword(pwd: string): Promise<void> {
+        await this.fill(this.txtPassword, pwd, 'Password');
     }
 
-    async enterPasswordConfirm(password: string) {
-        await this.txtPasswordConfirm.fill(password);
+    /**
+     * Sets the confirm password in the registration form
+     * @param pwd - Password to confirm
+     */
+    async setConfirmPassword(pwd: string): Promise<void> {
+        await this.fill(this.txtConfirmPassword, pwd, 'Confirm Password');
     }
 
-    async selectNewsletterSubscription(subscribe: boolean) {
-        await (subscribe ? this.rdoNewsletterYes : this.rdoNewsletterNo).check();
+    /**
+     * Checks the privacy policy checkbox
+     */
+    async setPrivacyPolicy(): Promise<void> {
+        await this.chkdPolicy.check();
     }
 
-    async agreeToPrivacyPolicy() {
-        await this.chkPrivacyPolicy.check();
+    /**
+     * Clicks the Continue button
+     */
+    async clickContinue(): Promise<void> {
+        await this.click(this.btnContinue, 'Continue Button');
     }
 
-    async clickContinue() {
-        await this.btnContinue.click();
+    /**
+     * Gets the confirmation message text
+     * @returns Promise<string> - Confirmation message text
+     */
+    async getConfirmationMsg(): Promise<string> {
+        return await this.msgConfirmation.textContent() ?? '';
     }
 
-    async registerAccount(
-        firstName: string,
-        lastName: string,
-        email: string,
-        telephone: string,
-        password: string,
-        subscribeToNewsletter: boolean
-    ) {
-        await this.enterFirstName(firstName);
-        await this.enterLastName(lastName);
-        await this.enterEmail(email);
-        await this.enterTelephone(telephone);
-        await this.enterPassword(password);
-        await this.enterPasswordConfirm(password);
-        await this.selectNewsletterSubscription(subscribeToNewsletter);
-        await this.agreeToPrivacyPolicy();
+    /**
+     * Complete registration workflow
+     * @param userData - Object containing registration data
+     */
+    async completeRegistration(userData: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        telephone: string;
+        password: string;
+    }): Promise<void> {
+        await this.setFirstName(userData.firstName);
+        await this.setLastName(userData.lastName);
+        await this.setEmail(userData.email);
+        await this.setTelephone(userData.telephone);
+        await this.setPassword(userData.password);
+        await this.setConfirmPassword(userData.password);
+        await this.setPrivacyPolicy();
         await this.clickContinue();
+        await expect(this.msgConfirmation).toBeVisible();
     }
 }

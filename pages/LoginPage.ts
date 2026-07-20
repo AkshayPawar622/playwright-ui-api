@@ -1,36 +1,62 @@
-import { Locator, Page } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class LoginPage {
-
-    private readonly page: Page;
-
-    private readonly txtEmail: Locator;
+export class LoginPage extends BasePage {
+    
+    // Locators
+    private readonly txtEmailAddress: Locator;
     private readonly txtPassword: Locator;
     private readonly btnLogin: Locator;
+    private readonly txtErrorMessage: Locator;
+    
 
     constructor(page: Page) {
-        this.page = page;
-
-        this.txtEmail = page.getByPlaceholder('E-Mail');
-        this.txtPassword = page.getByPlaceholder('Password');
-        this.btnLogin = page.getByRole('button', { name: 'Login' });
+        super(page);
+        
+        // Initialize locators with CSS selectors
+        this.txtEmailAddress = page.locator('#input-email');
+        this.txtPassword = page.locator('#input-password');
+        this.btnLogin = page.locator('input[value="Login"]');
+        this.txtErrorMessage=page.locator('.alert.alert-danger.alert-dismissible');
     }
 
-    async enterEmail(email: string) {
-        await this.txtEmail.fill(email);
+    /**
+     * Sets the email address in the email field
+     * @param email - Email address to enter
+     */
+    async setEmail(email: string){
+        await this.fill(this.txtEmailAddress, email, 'Email Address');
     }
 
-    async enterPassword(password: string) {
-        await this.txtPassword.fill(password);
+    /**
+     * Sets the password in the password field
+     * @param pwd - Password to enter
+     */
+    async setPassword(pwd: string) {
+        await this.fill(this.txtPassword, pwd, 'Password');
     }
 
-    async clickLogin() {
-        await this.btnLogin.click();
+    /**
+     * Clicks the login button
+     */
+    async clickLogin(){
+        await this.click(this.btnLogin, 'Login Button');
     }
 
-    async login(email: string, password: string) {
-        await this.enterEmail(email);
-        await this.enterPassword(password);
+    /**
+     * Performs complete login action
+     * @param email - Email address to enter
+     * @param password - Password to enter
+     */
+    async login(email: string, password: string){
+        await this.setEmail(email);
+        await this.setPassword(password);
         await this.clickLogin();
     }
+
+    async getloginErrorMessage():Promise<null | string>{
+       
+        return(this.txtErrorMessage.textContent());
+    }
+    
 }
