@@ -1,0 +1,18 @@
+[INFO] Clicking 'My Account Link'
+[INFO] Clicked 'My Account Link' successfully
+[INFO] Clicking 'Register Link'
+[INFO] Clicked 'Register Link' successfully
+[INFO] Entering 'Emmanuel' into 'First Name'
+[INFO] Entered value into 'First Name' successfully
+[INFO] Entering 'Bergnaum' into 'Last Name'
+[INFO] Entered value into 'Last Name' successfully
+[INFO] Entering 'Katrina49@gmail.com' into 'Email Address'
+[INFO] Entered value into 'Email Address' successfully
+[INFO] Entering '(899) 656-6612 x83082' into 'Telephone'
+[INFO] Entered value into 'Telephone' successfully
+[INFO] Entering 'Xt2rEmxRkLbOwff' into 'Password'
+[INFO] Entered value into 'Password' successfully
+[INFO] Entering 'Xt2rEmxRkLbOwff' into 'Confirm Password'
+[INFO] Entered value into 'Confirm Password' successfully
+[INFO] Clicking 'Continue Button'
+[INFO] Clicked 'Continue Button' successfully

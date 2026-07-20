@@ -1,0 +1,4 @@
+[INFO] Entering 'MacBook' into 'Search Box'
+[INFO] Entered value into 'Search Box' successfully
+[INFO] Clicking 'Search Button'
+[INFO] Clicked 'Search Button' successfully
